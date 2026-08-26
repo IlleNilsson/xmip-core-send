@@ -2,14 +2,14 @@
 [workspace]
 
 [package]
-name = "xmip-send"
+name = "xmip-core-send"
 version = "0.1.0"
 edition = "2024"
 license = "AGPL-3.0-or-later"
-repository = "https://github.com/IlleNilsson/xmip-send"
+repository = "https://github.com/IlleNilsson/xmip-core-send"
 description = "Send Ports, Send Groups, Send Locations and transport-neutral egress contracts for Xmip."
 
 [dependencies]
-xmip-core = { git = "https://github.com/IlleNilsson/xmip-core", rev = "9adfd1eb4a6a3b5a6b0b6ea9b3a1fb288b41c8fc" }
-xmip-message = { git = "https://github.com/IlleNilsson/xmip-message", rev = "e7967fc12dcc21197e8cc468b23210b244d83537" }
-xmip-stream = { git = "https://github.com/IlleNilsson/xmip-stream", rev = "3855d6b37988f0ff5962a27662824d5da20cce70" }
+xmip-core = { git = "https://github.com/IlleNilsson/xmip-core", branch = "main" }
+xmip-message = { package = "xmip-core-message", git = "https://github.com/IlleNilsson/xmip-core-message", branch = "main" }
+xmip-stream = { package = "xmip-core-stream", git = "https://github.com/IlleNilsson/xmip-core-stream", branch = "main" }
