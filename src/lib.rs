@@ -2,7 +2,7 @@
 
 use std::error::Error;
 use std::fmt;
-use xmip_core::{ArtifactId, PartyId};
+use xmip_core::{ArtifactId, Departing, PartyId};
 use xmip_message::Message;
 use xmip_party::Identity;
 use xmip_stream::Stream;
@@ -72,8 +72,20 @@ pub struct SendLocation {
     pub name: String,
     pub uri: String,
     pub transport: String,
+
+    /// How the Stream leaves: pushed, collected or scheduled.
+    ///
+    /// The mirror of `ReceivedStream::arriving`. Pushed is the default because
+    /// it is the case where Xmip owns the outcome — a collected departure has
+    /// left Xmip's hands the moment it is available, and its failure mode is
+    /// nobody turning up rather than anything Xmip can retry.
+    pub departing: Departing,
+
     /// The Party whose identity this Location presents. `None` inherits
     /// upward.
+    ///
+    /// Meaningless for [`Departing::Collected`], where Xmip is the server and
+    /// the collector is the one presenting something.
     pub present_as: Option<PartyId>,
 }
 
