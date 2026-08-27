@@ -4,6 +4,7 @@ use std::error::Error;
 use std::fmt;
 use xmip_core::{ArtifactId, PartyId};
 use xmip_message::Message;
+use xmip_party::Identity;
 use xmip_stream::Stream;
 
 /// Where in the chain an identity was declared.
@@ -96,6 +97,23 @@ pub struct SendGroup {
 pub struct SendRequest<'a> {
     pub message: &'a Message,
     pub location: &'a SendLocation,
+
+    /// The identity to present, resolved through [`SendChain`].
+    ///
+    /// ADR-0006: the transport receives the resolved identity and applies it
+    /// with its own technology-specific mechanism — an X.509 certificate on
+    /// FTPS, a bearer token on HTTP, an SSH key on SFTP. It does not resolve
+    /// one, and it does not infer one from whoever sent the Message.
+    ///
+    /// `None` means nothing in the chain declared one. That is a configuration
+    /// gap, and the transport is the only thing that knows whether its
+    /// technology can proceed without an identity at all.
+    pub present: Option<&'a Identity>,
+
+    /// The level that decided, for the audit trail. "Why is Xmip presenting
+    /// that certificate" is answered with an artifact, not a certificate.
+    pub present_from: Option<SendLevel>,
+
     pub dynamic_properties: &'a [(String, String)],
 }
 
