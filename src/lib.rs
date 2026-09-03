@@ -143,7 +143,9 @@ pub struct SendError {
 }
 
 impl fmt::Display for SendError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { f.write_str(&self.message) }
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(&self.message)
+    }
 }
 impl Error for SendError {}
 
@@ -165,7 +167,10 @@ mod tests {
             process: Some(PartyId::new(4)),
         };
 
-        assert_eq!(chain.resolve(), Some((PartyId::new(1), SendLevel::Location)));
+        assert_eq!(
+            chain.resolve(),
+            Some((PartyId::new(1), SendLevel::Location))
+        );
     }
 
     #[test]
@@ -196,6 +201,9 @@ mod tests {
             ..SendChain::default()
         };
 
-        assert_eq!(chain.resolve().map(|(_, level)| level), Some(SendLevel::Process));
+        assert_eq!(
+            chain.resolve().map(|(_, level)| level),
+            Some(SendLevel::Process)
+        );
     }
 }
