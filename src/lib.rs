@@ -1,11 +1,11 @@
 #![forbid(unsafe_code)]
 
+use message::Message;
+use party::Identity;
 use std::error::Error;
 use std::fmt;
-use xmip_core::{ArtifactId, Departing, PartyId};
-use xmip_message::Message;
-use xmip_party::Identity;
-use xmip_stream::Stream;
+use stream::Stream;
+use xcore::{ArtifactId, Departing, PartyId};
 
 /// Where in the chain an identity was declared.
 ///
