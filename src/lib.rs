@@ -2,8 +2,6 @@
 
 use message::Message;
 use party::Identity;
-use std::error::Error;
-use std::fmt;
 use stream::Stream;
 use xcore::{ArtifactId, Departing, PartyId};
 
@@ -136,18 +134,7 @@ pub struct SendResult {
     pub properties: Vec<(String, String)>,
 }
 
-#[derive(Debug)]
-pub struct SendError {
-    pub retryable: bool,
-    pub message: String,
-}
-
-impl fmt::Display for SendError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.write_str(&self.message)
-    }
-}
-impl Error for SendError {}
+xcore::declare_retryable_error!(SendError);
 
 pub trait SendTransport: Send + Sync {
     fn technology(&self) -> &'static str;
