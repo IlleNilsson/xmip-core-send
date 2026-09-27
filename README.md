@@ -8,7 +8,10 @@ the artifact that decided it.
 
 Send owns outbound orchestration, retry over Send Locations and failover
 between them; a transport technology moves the bytes. It does not receive, and
-it does not infer an identity from what arrived (ADR-0006).
+it does not infer an identity from what arrived (ADR-0006). A
+`SendTransport` that could not send answers with `xcore::Failure`, the
+estate's one retryable failure, so whatever decides to try again reads the
+judgement the transport made (ADR-0037, amendment 2026-09-27).
 
 `doc/architecture/runtime-model.md` section 10 governs the Send model and
 ADR-0006 the identity a Send Location presents, inherited up the chain where

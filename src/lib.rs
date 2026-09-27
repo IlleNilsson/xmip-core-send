@@ -3,7 +3,7 @@
 use message::Message;
 use party::Identity;
 use stream::Stream;
-use xcore::{ArtifactId, Departing, PartyId};
+use xcore::{ArtifactId, Departing, Failure, PartyId};
 
 /// Where in the chain an identity was declared.
 ///
@@ -134,11 +134,13 @@ pub struct SendResult {
     pub properties: Vec<(String, String)>,
 }
 
-xcore::declare_retryable_error!(SendError);
-
 pub trait SendTransport: Send + Sync {
     fn technology(&self) -> &'static str;
-    fn send(&self, request: SendRequest<'_>) -> Result<SendResult, SendError>;
+    /// Send the request.
+    ///
+    /// # Errors
+    /// Why it was not sent, and whether trying again could change that.
+    fn send(&self, request: SendRequest<'_>) -> Result<SendResult, Failure>;
 }
 
 #[cfg(test)]
