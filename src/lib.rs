@@ -1,9 +1,15 @@
 #![forbid(unsafe_code)]
 
-use message::Message;
-use party::Identity;
-use stream::Stream;
-use xcore::{ArtifactId, Departing, Failure, PartyId};
+//! Send Ports and Send Port Groups, and the chain that resolves whose
+//! identity a Send Location presents (ADR-0006).
+//!
+//! A Send Location is configured once, as `xmip-core-configure`'s
+//! `ConfiguredLocation`, and the runtime builds its transport from it through
+//! `xmip-core-transport`, the one trait every protocol implements in both
+//! directions (ADR-0010). What is here is what the Location does not hold:
+//! the levels above it and the walk that finds the identity presented.
+
+use xcore::{ArtifactId, PartyId};
 
 /// Where in the chain an identity was declared.
 ///
@@ -65,29 +71,6 @@ impl SendChain {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct SendLocation {
-    pub artifact_id: ArtifactId,
-    pub name: String,
-    pub uri: String,
-    pub transport: String,
-
-    /// How the Stream leaves: pushed, collected or scheduled.
-    ///
-    /// The mirror of `ReceivedStream::arriving`. Pushed is the default because
-    /// it is the case where Xmip owns the outcome — a collected departure has
-    /// left Xmip's hands the moment it is available, and its failure mode is
-    /// nobody turning up rather than anything Xmip can retry.
-    pub departing: Departing,
-
-    /// The Party whose identity this Location presents. `None` inherits
-    /// upward.
-    ///
-    /// Meaningless for [`Departing::Collected`], where Xmip is the server and
-    /// the collector is the one presenting something.
-    pub present_as: Option<PartyId>,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SendPort {
     pub artifact_id: ArtifactId,
     pub name: String,
@@ -101,46 +84,6 @@ pub struct SendGroup {
     pub name: String,
     pub ports: Vec<ArtifactId>,
     pub present_as: Option<PartyId>,
-}
-
-#[derive(Clone, Debug)]
-pub struct SendRequest<'a> {
-    pub message: &'a Message,
-    pub location: &'a SendLocation,
-
-    /// The identity to present, resolved through [`SendChain`].
-    ///
-    /// ADR-0006: the transport receives the resolved identity and applies it
-    /// with its own technology-specific mechanism — an X.509 certificate on
-    /// FTPS, a bearer token on HTTP, an SSH key on SFTP. It does not resolve
-    /// one, and it does not infer one from whoever sent the Message.
-    ///
-    /// `None` means nothing in the chain declared one. That is a configuration
-    /// gap, and the transport is the only thing that knows whether its
-    /// technology can proceed without an identity at all.
-    pub present: Option<&'a Identity>,
-
-    /// The level that decided, for the audit trail. "Why is Xmip presenting
-    /// that certificate" is answered with an artifact, not a certificate.
-    pub present_from: Option<SendLevel>,
-
-    pub dynamic_properties: &'a [(String, String)],
-}
-
-#[derive(Clone, Debug)]
-pub struct SendResult {
-    pub response: Option<Stream>,
-    pub status: String,
-    pub properties: Vec<(String, String)>,
-}
-
-pub trait SendTransport: Send + Sync {
-    fn technology(&self) -> &'static str;
-    /// Send the request.
-    ///
-    /// # Errors
-    /// Why it was not sent, and whether trying again could change that.
-    fn send(&self, request: SendRequest<'_>) -> Result<SendResult, Failure>;
 }
 
 #[cfg(test)]

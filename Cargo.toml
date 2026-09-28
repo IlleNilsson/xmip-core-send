@@ -7,13 +7,10 @@ version = "0.1.0"
 edition = "2024"
 license = "AGPL-3.0-or-later"
 repository = "https://github.com/IlleNilsson/xmip-core-send"
-description = "Send Ports, Send Groups, Send Locations and transport-neutral egress contracts for Xmip."
+description = "Xmip Send Ports and Send Port Groups, and the chain that resolves the identity a Send Location presents."
 
 [dependencies]
 xcore = { package = "xmip-core", git = "https://github.com/IlleNilsson/xmip-core", branch = "main" }
-party = { package = "xmip-core-party", git = "https://github.com/IlleNilsson/xmip-core-party", branch = "main" }
-message = { package = "xmip-core-message", git = "https://github.com/IlleNilsson/xmip-core-message", branch = "main" }
-stream = { package = "xmip-core-stream", git = "https://github.com/IlleNilsson/xmip-core-stream", branch = "main" }
 
 [profile.dev.package."*"]
 opt-level = 3
