@@ -2,7 +2,7 @@
 
 Send Ports and Send Port Groups, and the chain that resolves whose identity
 a Send Location presents: `SendChain::resolve` walks Send Location, Send
-Port, Send Port Group and the sending Xmip Process, innermost first, and says
+Port, Send Port Group and the sending Work Process, innermost first, and says
 which level declared the identity, so an operator asking why Xmip is
 presenting that certificate gets the artifact that decided it (ADR-0006).
 
