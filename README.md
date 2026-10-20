@@ -10,7 +10,7 @@ A Send Location is configured once, as `xmip-core-configure`'s
 `ConfiguredLocation`; the runtime builds its transport from that through
 `xmip-core-transport`'s one trait, which every protocol implements in both
 directions (ADR-0010), and a transport that could not send answers with its
-own retryable failure, so whatever decides to try again reads the judgement
+own retryable failure, so whatever decides to try again reads the judgment
 the transport made (ADR-0037, amendment 2026-09-27). Send does not receive,
 and it does not infer an identity from what arrived (ADR-0006).
 
