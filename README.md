@@ -16,4 +16,4 @@ and it does not infer an identity from what arrived (ADR-0006).
 
 `doc/architecture/runtime-model.md` section 10 governs the Send model and
 ADR-0006 the identity a Send Location presents, inherited up the chain where
-it is not set; `architecture.toml` carries the maturity.
+it is not set; `architecture.xmip` carries the maturity.
